@@ -1377,7 +1377,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
               mat.color.set(isSelected ? '#FFB866' : defaultPrimaryColor);
               mat.emissive.set(isSelected ? '#FF9F43' : '#000000');
               mat.emissiveIntensity = isSelected ? 0.22 : 0;
-            } else if (mat?.Emissive !== undefined || 'emissive' in mat) {
+            } else if ('emissive' in mat) {
               mat.emissive.set(isSelected ? '#FF9F43' : '#000000');
               mat.emissiveIntensity = isSelected ? 0.16 : 0;
             }
