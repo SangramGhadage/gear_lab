@@ -714,35 +714,35 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
     const outerRaceGeo = new THREE.CylinderGeometry(outerR, outerR, width, 28, 1, true);
     const outerRaceMat = new THREE.MeshStandardMaterial({
-      color: '#4A5568',
-      metalness: 0.9,
-      roughness: 0.2,
+      color: '#4A4843',
+      metalness: 0.78,
+      roughness: 0.28,
       side: THREE.DoubleSide,
     });
-    outerRaceMat.userData = { baseColor: '#4A5568', isBearingRace: true };
+    outerRaceMat.userData = { baseColor: '#4A4843', isBearingRace: true };
     const outerRace = new THREE.Mesh(outerRaceGeo, outerRaceMat);
     outerRace.rotation.x = Math.PI / 2;
     group.add(outerRace);
 
     const innerRaceGeo = new THREE.CylinderGeometry(innerR, innerR, width * 1.05, 24, 1, true);
     const innerRaceMat = new THREE.MeshStandardMaterial({
-      color: '#718096',
-      metalness: 0.9,
-      roughness: 0.2,
+      color: '#6E6A63',
+      metalness: 0.78,
+      roughness: 0.26,
       side: THREE.DoubleSide,
     });
-    innerRaceMat.userData = { baseColor: '#718096', isBearingRace: true };
+    innerRaceMat.userData = { baseColor: '#6E6A63', isBearingRace: true };
     const innerRace = new THREE.Mesh(innerRaceGeo, innerRaceMat);
     innerRace.rotation.x = Math.PI / 2;
     group.add(innerRace);
 
     const ballGeo = new THREE.SphereGeometry(ballR, 12, 12);
     const ballMat = new THREE.MeshStandardMaterial({
-      color: '#E2E8F0',
-      metalness: 0.96,
-      roughness: 0.1,
+      color: '#C8A96E',
+      metalness: 0.88,
+      roughness: 0.16,
     });
-    ballMat.userData = { baseColor: '#E2E8F0' };
+    ballMat.userData = { baseColor: '#C8A96E' };
 
     for (let i = 0; i < ballsCount; i++) {
       const angle = (i * 2 * Math.PI) / ballsCount;
@@ -763,7 +763,8 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     const height = container.clientHeight || window.innerHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#080A0E');
+    // Archival Drafting Vellum background (#F4F1EA)
+    scene.background = new THREE.Color('#F4F1EA');
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 120);
@@ -775,39 +776,45 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.12;
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // Studio Industrial Lighting
-    const ambientLight = new THREE.AmbientLight('#C8D4E3', 0.85);
+    // Bright Daylight Architectural Studio Lighting
+    const ambientLight = new THREE.AmbientLight('#FFFDF9', 1.75);
     scene.add(ambientLight);
 
-    const mainDirLight = new THREE.DirectionalLight('#F3F5F7', 2.2);
-    mainDirLight.position.set(7, 12, 9);
+    const hemiLight = new THREE.HemisphereLight('#FFFFFF', '#D8D0C2', 1.15);
+    hemiLight.position.set(0, 15, 0);
+    scene.add(hemiLight);
+
+    const mainDirLight = new THREE.DirectionalLight('#FFFBF4', 2.4);
+    mainDirLight.position.set(8, 14, 10);
     mainDirLight.castShadow = true;
     mainDirLight.shadow.mapSize.set(1024, 1024);
     scene.add(mainDirLight);
 
-    const fillDirLight = new THREE.DirectionalLight('#6488B4', 1.15);
-    fillDirLight.position.set(-9, 5, -7);
+    const fillDirLight = new THREE.DirectionalLight('#DCE6F2', 1.35);
+    fillDirLight.position.set(-10, 6, -8);
     scene.add(fillDirLight);
 
-    const rimSpotLight = new THREE.SpotLight('#FF9F43', 3.4);
-    rimSpotLight.position.set(0, 7, -9);
+    const rimSpotLight = new THREE.SpotLight('#D84A1B', 2.2);
+    rimSpotLight.position.set(0, 8, -9);
     rimSpotLight.angle = 0.65;
-    rimSpotLight.penumbra = 0.8;
+    rimSpotLight.penumbra = 0.85;
     scene.add(rimSpotLight);
 
-    const pitchPointLight = new THREE.PointLight('#FF9F43', 1.1, 5.0);
+    const pitchPointLight = new THREE.PointLight('#D84A1B', 0.9, 5.0);
     pitchPointLight.position.set(0, 0.4, 1.8);
     scene.add(pitchPointLight);
 
-    // 1. DRIVE PINION GROUP (G1)
+    // 1. DRIVE PINION GROUP (G1) — Warm Satin Machined Steel
     const pinionGroup = new THREE.Group();
     const pinionMat = new THREE.MeshStandardMaterial({
-      color: '#B8C2CC',
-      metalness: 0.88,
-      roughness: 0.24,
+      color: '#8C8881',
+      metalness: 0.62,
+      roughness: 0.32,
     });
     const pinionMesh = new THREE.Mesh(new THREE.BufferGeometry(), pinionMat);
     pinionMesh.castShadow = true;
@@ -816,9 +823,9 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     pinionGroup.add(pinionMesh);
 
     const pinionBossMat = new THREE.MeshStandardMaterial({
-      color: '#8F9BA8',
-      metalness: 0.85,
-      roughness: 0.3,
+      color: '#6E6A63',
+      metalness: 0.65,
+      roughness: 0.35,
     });
     const pinionBoss = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.12, 32), pinionBossMat);
     pinionBoss.rotation.x = Math.PI / 2;
@@ -827,12 +834,12 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     pinionGroupRef.current = pinionGroup;
     scene.add(pinionGroup);
 
-    // 2. DRIVEN GEAR GROUP (G2)
+    // 2. DRIVEN GEAR GROUP (G2) — Prussian Blueprint Anodized Steel / Gunmetal
     const gearGroup = new THREE.Group();
     const gearMat = new THREE.MeshStandardMaterial({
-      color: '#6C7886',
-      metalness: 0.86,
-      roughness: 0.28,
+      color: '#495A6B',
+      metalness: 0.58,
+      roughness: 0.34,
     });
     const gearMesh = new THREE.Mesh(new THREE.BufferGeometry(), gearMat);
     gearMesh.castShadow = true;
@@ -841,9 +848,9 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     gearGroup.add(gearMesh);
 
     const gearBossMat = new THREE.MeshStandardMaterial({
-      color: '#525C68',
-      metalness: 0.82,
-      roughness: 0.34,
+      color: '#364452',
+      metalness: 0.62,
+      roughness: 0.38,
     });
     const gearBoss = new THREE.Mesh(new THREE.CylinderGeometry(0.72, 0.72, 1.12, 32), gearBossMat);
     gearBoss.rotation.x = Math.PI / 2;
@@ -852,11 +859,11 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     gearGroupRef.current = gearGroup;
     scene.add(gearGroup);
 
-    // 3. INPUT SHAFT GROUP (S1)
+    // 3. INPUT SHAFT GROUP (S1) — Precision Ground Silver Steel & Vermilion Key
     const shaftInGroup = new THREE.Group();
     const shaftInMain = new THREE.Mesh(
       new THREE.CylinderGeometry(0.37, 0.37, 3.4, 28),
-      new THREE.MeshStandardMaterial({ color: '#D0D7DE', metalness: 0.92, roughness: 0.18 })
+      new THREE.MeshStandardMaterial({ color: '#B5B0A8', metalness: 0.72, roughness: 0.24 })
     );
     shaftInMain.rotation.x = Math.PI / 2;
     shaftInMain.castShadow = true;
@@ -864,7 +871,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
     const shaftInExt = new THREE.Mesh(
       new THREE.CylinderGeometry(0.28, 0.28, 1.1, 24),
-      new THREE.MeshStandardMaterial({ color: '#9BA6B2', metalness: 0.9, roughness: 0.22 })
+      new THREE.MeshStandardMaterial({ color: '#948F87', metalness: 0.68, roughness: 0.28 })
     );
     shaftInExt.rotation.x = Math.PI / 2;
     shaftInExt.position.set(0, 0, -2.0);
@@ -872,7 +879,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
     const keyIn = new THREE.Mesh(
       new THREE.BoxGeometry(0.14, 0.16, 1.25),
-      new THREE.MeshStandardMaterial({ color: '#FF9F43', metalness: 0.75, roughness: 0.25 })
+      new THREE.MeshStandardMaterial({ color: '#D84A1B', metalness: 0.45, roughness: 0.32 })
     );
     keyIn.position.set(0.39, 0, 0);
     shaftInGroup.add(keyIn);
@@ -884,7 +891,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     const shaftOutGroup = new THREE.Group();
     const shaftOutMain = new THREE.Mesh(
       new THREE.CylinderGeometry(0.47, 0.47, 3.4, 28),
-      new THREE.MeshStandardMaterial({ color: '#C2CAD2', metalness: 0.92, roughness: 0.18 })
+      new THREE.MeshStandardMaterial({ color: '#A8A39B', metalness: 0.72, roughness: 0.24 })
     );
     shaftOutMain.rotation.x = Math.PI / 2;
     shaftOutMain.castShadow = true;
@@ -892,7 +899,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
     const shaftOutExt = new THREE.Mesh(
       new THREE.CylinderGeometry(0.36, 0.36, 1.1, 24),
-      new THREE.MeshStandardMaterial({ color: '#9BA6B2', metalness: 0.9, roughness: 0.22 })
+      new THREE.MeshStandardMaterial({ color: '#8A857D', metalness: 0.68, roughness: 0.28 })
     );
     shaftOutExt.rotation.x = Math.PI / 2;
     shaftOutExt.position.set(0, 0, 2.0);
@@ -900,7 +907,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
     const keyOut = new THREE.Mesh(
       new THREE.BoxGeometry(0.16, 0.18, 1.25),
-      new THREE.MeshStandardMaterial({ color: '#FF9F43', metalness: 0.75, roughness: 0.25 })
+      new THREE.MeshStandardMaterial({ color: '#D84A1B', metalness: 0.45, roughness: 0.32 })
     );
     keyOut.position.set(0.49, 0, 0);
     shaftOutGroup.add(keyOut);
@@ -939,13 +946,13 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
     housingGroupRef.current = housingGroup;
     scene.add(housingGroup);
 
-    // 7. VECTORS & REFERENCE GRID GROUPS
+    // 7. VECTORS & ARCHITECTURAL DRAFTING GRID GROUPS
     const vectorsGroup = new THREE.Group();
     vectorsGroupRef.current = vectorsGroup;
     scene.add(vectorsGroup);
 
     const gridGroup = new THREE.Group();
-    const gridHelper = new THREE.GridHelper(28, 56, '#2B3440', '#161D27');
+    const gridHelper = new THREE.GridHelper(28, 56, '#B8B0A2', '#DED8CC');
     gridGroup.add(gridHelper);
     gridGroupRef.current = gridGroup;
     scene.add(gridGroup);
@@ -1233,11 +1240,11 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
       const frontPlate = new THREE.Mesh(
         new THREE.BoxGeometry(frameSpanX * 0.88, Math.abs(basePlateY) * 0.85, 0.22),
         new THREE.MeshStandardMaterial({
-          color: '#1E2631',
-          metalness: 0.7,
-          roughness: 0.45,
+          color: '#D6CFC2',
+          metalness: 0.25,
+          roughness: 0.65,
           transparent: true,
-          opacity: 0.78,
+          opacity: 0.76,
         })
       );
       frontPlate.position.set(0, basePlateY * 0.48, 0);
@@ -1246,9 +1253,9 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
       const backPlate = new THREE.Mesh(
         new THREE.BoxGeometry(frameSpanX * 0.88, Math.abs(basePlateY) * 0.85, 0.24),
         new THREE.MeshStandardMaterial({
-          color: '#1A222C',
-          metalness: 0.75,
-          roughness: 0.42,
+          color: '#C7BFB0',
+          metalness: 0.3,
+          roughness: 0.58,
         })
       );
       backPlate.position.set(0, basePlateY * 0.48, 0);
@@ -1257,9 +1264,9 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
       const baseSlab = new THREE.Mesh(
         new THREE.BoxGeometry(frameSpanX * 1.1, 0.35, 3.6),
         new THREE.MeshStandardMaterial({
-          color: '#151B23',
-          metalness: 0.8,
-          roughness: 0.35,
+          color: '#3A3834',
+          metalness: 0.45,
+          roughness: 0.52,
         })
       );
       baseSlab.position.set(0, basePlateY, 0);
@@ -1268,14 +1275,14 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
       const railFront = new THREE.Mesh(
         new THREE.BoxGeometry(frameSpanX * 0.98, 0.08, 0.35),
-        new THREE.MeshStandardMaterial({ color: '#2B3440', metalness: 0.85, roughness: 0.25 })
+        new THREE.MeshStandardMaterial({ color: '#8C867B', metalness: 0.65, roughness: 0.32 })
       );
       railFront.position.set(0, basePlateY + 0.2, 1.15);
       housingBaseRef.current.add(railFront);
 
       const railBack = new THREE.Mesh(
         new THREE.BoxGeometry(frameSpanX * 0.98, 0.08, 0.35),
-        new THREE.MeshStandardMaterial({ color: '#2B3440', metalness: 0.85, roughness: 0.25 })
+        new THREE.MeshStandardMaterial({ color: '#8C867B', metalness: 0.65, roughness: 0.32 })
       );
       railBack.position.set(0, basePlateY + 0.2, -1.15);
       housingBaseRef.current.add(railBack);
@@ -1307,11 +1314,11 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
 
       const circle1 = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(pts1),
-        new THREE.LineBasicMaterial({ color: '#FF9F43' })
+        new THREE.LineBasicMaterial({ color: '#D84A1B' })
       );
       const circle2 = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints(pts2),
-        new THREE.LineBasicMaterial({ color: '#56D6A0' })
+        new THREE.LineBasicMaterial({ color: '#1E5288' })
       );
 
       const alpha = (params.pressureAngleDeg * Math.PI) / 180;
@@ -1323,7 +1330,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
           new THREE.Vector3(pitchPointX - dx, -dy, 0.58),
           new THREE.Vector3(pitchPointX + dx, dy, 0.58),
         ]),
-        new THREE.LineBasicMaterial({ color: '#FF6B6B' })
+        new THREE.LineBasicMaterial({ color: '#1E6F50' })
       );
 
       const centerDistLine = new THREE.Line(
@@ -1331,12 +1338,12 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
           new THREE.Vector3(pinionX, 0, 0.56),
           new THREE.Vector3(gearX, 0, 0.56),
         ]),
-        new THREE.LineBasicMaterial({ color: '#A0AAB7' })
+        new THREE.LineBasicMaterial({ color: '#52504C' })
       );
 
       const pitchSphere = new THREE.Mesh(
         new THREE.SphereGeometry(0.075, 16, 16),
-        new THREE.MeshBasicMaterial({ color: '#FF9F43' })
+        new THREE.MeshBasicMaterial({ color: '#D84A1B' })
       );
       pitchSphere.position.set(pitchPointX, 0, 0.58);
 
@@ -1374,24 +1381,24 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
           if (mat && 'wireframe' in mat) {
             mat.wireframe = isWireframe;
             if (mesh === pinionMeshRef.current || mesh === gearMeshRef.current) {
-              mat.color.set(isSelected ? '#FFB866' : defaultPrimaryColor);
-              mat.emissive.set(isSelected ? '#FF9F43' : '#000000');
-              mat.emissiveIntensity = isSelected ? 0.22 : 0;
+              mat.color.set(isSelected ? '#D84A1B' : defaultPrimaryColor);
+              mat.emissive.set(isSelected ? '#D84A1B' : '#000000');
+              mat.emissiveIntensity = isSelected ? 0.14 : 0;
             } else if ('emissive' in mat) {
-              mat.emissive.set(isSelected ? '#FF9F43' : '#000000');
-              mat.emissiveIntensity = isSelected ? 0.16 : 0;
+              mat.emissive.set(isSelected ? '#D84A1B' : '#000000');
+              mat.emissiveIntensity = isSelected ? 0.12 : 0;
             }
           }
         }
       });
     };
 
-    updateGroupVisuals(pinionGroupRef.current, 'pinion', '#B8C2CC');
-    updateGroupVisuals(gearGroupRef.current, 'gear', '#6C7886');
-    updateGroupVisuals(shaftInGroupRef.current, 'shaft_in', '#D0D7DE');
-    updateGroupVisuals(shaftOutGroupRef.current, 'shaft_out', '#C2CAD2');
-    updateGroupVisuals(bearingsGroupRef.current, 'bearings', '#4A5568');
-    updateGroupVisuals(housingGroupRef.current, 'housing', '#1E2631');
+    updateGroupVisuals(pinionGroupRef.current, 'pinion', '#8C8881');
+    updateGroupVisuals(gearGroupRef.current, 'gear', '#495A6B');
+    updateGroupVisuals(shaftInGroupRef.current, 'shaft_in', '#B5B0A8');
+    updateGroupVisuals(shaftOutGroupRef.current, 'shaft_out', '#A8A39B');
+    updateGroupVisuals(bearingsGroupRef.current, 'bearings', '#4A4843');
+    updateGroupVisuals(housingGroupRef.current, 'housing', '#D6CFC2');
 
     if (vectorsGroupRef.current) {
       vectorsGroupRef.current.visible = showPitchVectors;
@@ -1480,13 +1487,17 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
               style={{
                 transform: `translate3d(${labelCoords.pinion.x}px, ${labelCoords.pinion.y}px, 0) translate(-50%, -100%)`,
               }}
-              className={`pointer-events-auto absolute top-0 left-0 px-2 py-1 text-[10px] font-mono tracking-wider uppercase border transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              className={`pointer-events-auto absolute top-0 left-0 px-2.5 py-1 text-[10px] font-mono tracking-wider uppercase border transition-colors whitespace-nowrap flex items-center gap-1.5 shadow-sm ${
                 selectedComponent === 'pinion'
-                  ? 'bg-[#FF9F43] text-[#080A0E] border-[#FF9F43] font-bold'
-                  : 'bg-[#080A0E]/90 text-[#F3F5F7] border-[#2B3440] hover:border-[#FF9F43]'
+                  ? 'bg-[#D84A1B] text-[#FAF8F5] border-[#D84A1B] font-bold'
+                  : 'bg-[#FAF8F5]/95 text-[#181816] border-[#C8C1B4] hover:border-[#D84A1B]'
               }`}
             >
-              <span className="w-1.5 h-1.5 bg-[#FF9F43] inline-block" />
+              <span
+                className={`w-1.5 h-1.5 inline-block ${
+                  selectedComponent === 'pinion' ? 'bg-[#FAF8F5]' : 'bg-[#D84A1B]'
+                }`}
+              />
               G₁ PINION ({params.n1}T | Ø{kinematics.pitchDiameter1.toFixed(0)}mm)
             </button>
           )}
@@ -1497,13 +1508,17 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
               style={{
                 transform: `translate3d(${labelCoords.gear.x}px, ${labelCoords.gear.y}px, 0) translate(-50%, -100%)`,
               }}
-              className={`pointer-events-auto absolute top-0 left-0 px-2 py-1 text-[10px] font-mono tracking-wider uppercase border transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              className={`pointer-events-auto absolute top-0 left-0 px-2.5 py-1 text-[10px] font-mono tracking-wider uppercase border transition-colors whitespace-nowrap flex items-center gap-1.5 shadow-sm ${
                 selectedComponent === 'gear'
-                  ? 'bg-[#FF9F43] text-[#080A0E] border-[#FF9F43] font-bold'
-                  : 'bg-[#080A0E]/90 text-[#F3F5F7] border-[#2B3440] hover:border-[#FF9F43]'
+                  ? 'bg-[#1E5288] text-[#FAF8F5] border-[#1E5288] font-bold'
+                  : 'bg-[#FAF8F5]/95 text-[#181816] border-[#C8C1B4] hover:border-[#1E5288]'
               }`}
             >
-              <span className="w-1.5 h-1.5 bg-[#56D6A0] inline-block" />
+              <span
+                className={`w-1.5 h-1.5 inline-block ${
+                  selectedComponent === 'gear' ? 'bg-[#FAF8F5]' : 'bg-[#1E5288]'
+                }`}
+              />
               G₂ WHEEL ({params.n2}T | Ø{kinematics.pitchDiameter2.toFixed(0)}mm)
             </button>
           )}
@@ -1513,7 +1528,7 @@ const GearAssemblyViewport: React.FC<SceneAssemblyProps> = ({
               style={{
                 transform: `translate3d(${labelCoords.pitch.x}px, ${labelCoords.pitch.y}px, 0) translate(-50%, 0%)`,
               }}
-              className="absolute top-0 left-0 px-1.5 py-0.5 text-[9px] font-mono bg-[#151B23]/95 text-[#FF9F43] border border-[#FF9F43]/60 whitespace-nowrap"
+              className="absolute top-0 left-0 px-2 py-0.5 text-[9px] font-mono bg-[#181816] text-[#FAF8F5] border border-[#181816] whitespace-nowrap shadow-sm"
             >
               PITCH PT P // α={params.pressureAngleDeg}°
             </div>
@@ -1620,33 +1635,33 @@ export default function Home() {
 
   return (
     <div
-      className="w-screen h-screen overflow-hidden flex flex-col select-none bg-[#080A0E] text-[#F3F5F7]"
+      className="w-screen h-screen overflow-hidden flex flex-col select-none bg-[#F4F1EA] text-[#181816]"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* =====================================================================
-          1. COMPACT TOP NAVIGATION BAR
+          1. COMPACT TOP NAVIGATION BAR (BRAUN / ARCHITECTURAL LIGHT THEME)
          ===================================================================== */}
-      <header className="h-12 bg-[#10141B] border-b border-[#2B3440] px-4 flex items-center justify-between z-30 shrink-0">
+      <header className="h-12 bg-[#EAE5DC] border-b border-[#C8C1B4] px-4 flex items-center justify-between z-30 shrink-0">
         {/* Left: Brand Identity & Status */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 bg-[#FF9F43] text-[#080A0E] flex items-center justify-center font-bold text-xs font-mono">
+            <div className="w-6 h-6 bg-[#D84A1B] text-[#FAF8F5] flex items-center justify-center font-bold text-xs font-mono">
               GL
             </div>
             <div>
               <span
-                className="text-sm font-bold tracking-wider uppercase text-[#F3F5F7]"
+                className="text-sm font-bold tracking-wider uppercase text-[#181816]"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 GEAR LAB
               </span>
-              <span className="hidden sm:inline-block ml-2 text-[10px] font-mono text-[#687484] border border-[#2B3440] px-1.5 py-0.5 bg-[#080A0E]">
-                SYS.ENG // REV 4.2
+              <span className="hidden sm:inline-block ml-2 text-[10px] font-mono text-[#52504C] border border-[#C8C1B4] px-1.5 py-0.5 bg-[#FAF8F5]">
+                ARCHIVE // REV 4.2
               </span>
             </div>
           </div>
 
-          <div className="h-4 w-[1px] bg-[#2B3440] hidden md:block" />
+          <div className="h-4 w-[1px] bg-[#C8C1B4] hidden md:block" />
 
           {/* Main Mode Tabs */}
           <nav className="hidden md:flex items-center gap-1">
@@ -1664,14 +1679,14 @@ export default function Home() {
                   onClick={() => setActiveTab(tab.id as ActiveTab)}
                   className={`px-3 py-1.5 text-[11px] font-mono tracking-wide uppercase flex items-center gap-1.5 border transition-colors ${
                     active
-                      ? 'bg-[#151B23] text-[#FF9F43] border-[#FF9F43]'
-                      : 'bg-transparent text-[#A0AAB7] border-transparent hover:text-[#F3F5F7] hover:border-[#2B3440]'
+                      ? 'bg-[#FAF8F5] text-[#D84A1B] border-[#181816] font-semibold shadow-2xs'
+                      : 'bg-transparent text-[#52504C] border-transparent hover:text-[#181816] hover:border-[#C8C1B4]'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   {tab.label}
                   {tab.id === 'academy' && challengeStatuses.some((c) => c.passed) && (
-                    <span className="w-1.5 h-1.5 bg-[#56D6A0]" />
+                    <span className="w-1.5 h-1.5 bg-[#1E6F50]" />
                   )}
                 </button>
               );
@@ -1681,7 +1696,7 @@ export default function Home() {
 
         {/* Right: Camera Presets & Global Toggles */}
         <div className="flex items-center gap-2">
-          <div className="hidden xl:flex items-center bg-[#080A0E] border border-[#2B3440] p-0.5">
+          <div className="hidden xl:flex items-center bg-[#FAF8F5] border border-[#C8C1B4] p-0.5">
             {(
               [
                 { id: 'isometric', label: 'ISO' },
@@ -1696,8 +1711,8 @@ export default function Home() {
                 onClick={() => setCameraPreset(cam.id)}
                 className={`px-2 py-1 text-[10px] font-mono uppercase transition-colors ${
                   cameraPreset === cam.id
-                    ? 'bg-[#FF9F43] text-[#080A0E] font-semibold'
-                    : 'text-[#A0AAB7] hover:text-[#F3F5F7]'
+                    ? 'bg-[#181816] text-[#FAF8F5] font-semibold'
+                    : 'text-[#52504C] hover:text-[#181816]'
                 }`}
               >
                 {cam.label}
@@ -1710,8 +1725,8 @@ export default function Home() {
             title="Toggle 3D Spatial Callout Labels"
             className={`px-2.5 py-1 text-[10px] font-mono uppercase border transition-colors flex items-center gap-1 ${
               showAnnotations
-                ? 'bg-[#151B23] text-[#FF9F43] border-[#FF9F43]/60'
-                : 'bg-[#080A0E] text-[#687484] border-[#2B3440]'
+                ? 'bg-[#FAF8F5] text-[#D84A1B] border-[#D84A1B] font-semibold'
+                : 'bg-[#EAE5DC] text-[#858078] border-[#C8C1B4]'
             }`}
           >
             <Crosshair className="w-3 h-3" />
@@ -1723,8 +1738,8 @@ export default function Home() {
             title="Toggle Reduced Motion Accessibility"
             className={`px-2.5 py-1 text-[10px] font-mono uppercase border transition-colors ${
               reducedMotion
-                ? 'bg-[#151B23] text-[#56D6A0] border-[#56D6A0]/60'
-                : 'bg-[#080A0E] text-[#687484] border-[#2B3440]'
+                ? 'bg-[#FAF8F5] text-[#1E6F50] border-[#1E6F50] font-semibold'
+                : 'bg-[#EAE5DC] text-[#52504C] border-[#C8C1B4]'
             }`}
           >
             {reducedMotion ? 'MOTION: MIN' : 'MOTION: FULL'}
@@ -1737,17 +1752,17 @@ export default function Home() {
          ===================================================================== */}
       <div className="flex-1 relative flex overflow-hidden">
         {/* DOMINANT CENTERED 3D VIEWPORT */}
-        <div className="flex-1 relative h-full bg-[#080A0E]">
-          {/* Subtle Technical Viewport Corner Reticles */}
-          <div className="pointer-events-none absolute inset-3 border border-[#2B3440]/40 z-10 flex flex-col justify-between p-3">
+        <div className="flex-1 relative h-full bg-[#F4F1EA]">
+          {/* Subtle Technical Viewport Drafting Frame */}
+          <div className="pointer-events-none absolute inset-3 border border-[#C8C1B4] z-10 flex flex-col justify-between p-3">
             <div className="flex justify-between items-start">
-              <div className="text-[10px] font-mono text-[#687484] bg-[#080A0E]/80 px-2 py-1 border border-[#2B3440]">
-                VIEWPORT // DIN-867 INVOLUTE SPUR PAIR (α = {params.pressureAngleDeg}°)
+              <div className="text-[10px] font-mono text-[#52504C] bg-[#FAF8F5]/90 px-2.5 py-1 border border-[#C8C1B4]">
+                DWG. NO. 867-A // INVOLUTE SPUR PAIR (α = {params.pressureAngleDeg}°)
               </div>
-              <div className="text-[10px] font-mono text-[#A0AAB7] bg-[#080A0E]/80 px-2 py-1 border border-[#2B3440] flex items-center gap-2">
-                <span className="text-[#FF9F43] font-semibold">{kinematics.classification}</span>
-                <span>|</span>
-                <span>i = {kinematics.ratio.toFixed(2)} : 1</span>
+              <div className="text-[10px] font-mono text-[#181816] bg-[#FAF8F5]/90 px-2.5 py-1 border border-[#C8C1B4] flex items-center gap-2">
+                <span className="text-[#D84A1B] font-bold">{kinematics.classification}</span>
+                <span className="text-[#C8C1B4]">|</span>
+                <span className="font-semibold">i = {kinematics.ratio.toFixed(2)} : 1</span>
               </div>
             </div>
           </div>
@@ -1773,18 +1788,18 @@ export default function Home() {
           />
 
           {/* FLOATING LEFT TOOL RAIL */}
-          <aside className="absolute left-5 top-14 z-20 w-56 bg-[#151B23]/95 border border-[#2B3440] p-3 flex flex-col gap-3 shadow-2xl">
+          <aside className="absolute left-5 top-14 z-20 w-56 bg-[#FAF8F5]/95 border border-[#C8C1B4] p-3 flex flex-col gap-3 shadow-md">
             {/* Render & Assembly Mode Selector */}
             <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-[#687484] mb-1.5 flex items-center justify-between">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-[#858078] mb-1.5 flex items-center justify-between">
                 <span>RENDER & CAD MODE</span>
-                <span className="text-[#FF9F43]">[W / E]</span>
+                <span className="text-[#D84A1B] font-semibold">[W / E]</span>
               </div>
               <div className="grid grid-cols-1 gap-1">
                 {(
                   [
-                    { id: 'rendered', label: 'PBR Brushed Alloy', icon: Box },
-                    { id: 'wireframe', label: 'Technical Wireframe', icon: Cpu },
+                    { id: 'rendered', label: 'Machined Steel PBR', icon: Box },
+                    { id: 'wireframe', label: 'Drafting Wireframe', icon: Cpu },
                     { id: 'exploded', label: 'Exploded Assembly', icon: Layers },
                   ] as { id: ViewMode; label: string; icon: any }[]
                 ).map((mode) => {
@@ -1799,15 +1814,15 @@ export default function Home() {
                       }}
                       className={`px-2.5 py-1.5 text-xs font-mono flex items-center justify-between border transition-colors ${
                         active
-                          ? 'bg-[#FF9F43] text-[#080A0E] border-[#FF9F43] font-semibold'
-                          : 'bg-[#10141B] text-[#A0AAB7] border-[#2B3440] hover:border-[#687484] hover:text-[#F3F5F7]'
+                          ? 'bg-[#181816] text-[#FAF8F5] border-[#181816] font-semibold'
+                          : 'bg-[#EAE5DC]/70 text-[#52504C] border-[#C8C1B4] hover:border-[#181816] hover:text-[#181816]'
                       }`}
                     >
                       <span className="flex items-center gap-2">
                         <Icon className="w-3.5 h-3.5" />
                         {mode.label}
                       </span>
-                      {active && <span className="text-[9px]">ACTIVE</span>}
+                      {active && <span className="text-[9px] text-[#D84A1B] font-bold">●</span>}
                     </button>
                   );
                 })}
@@ -1815,10 +1830,10 @@ export default function Home() {
 
               {/* Explode Distance Fine Slider */}
               {viewMode === 'exploded' && (
-                <div className="mt-2 pt-2 border-t border-[#2B3440]">
-                  <div className="flex justify-between text-[10px] font-mono text-[#A0AAB7] mb-1">
+                <div className="mt-2 pt-2 border-t border-[#C8C1B4]">
+                  <div className="flex justify-between text-[10px] font-mono text-[#52504C] mb-1">
                     <span>AXIAL SEPARATION</span>
-                    <span className="text-[#FF9F43]">{(explodeFactor * 100).toFixed(0)}%</span>
+                    <span className="text-[#D84A1B] font-bold">{(explodeFactor * 100).toFixed(0)}%</span>
                   </div>
                   <input
                     type="range"
@@ -1827,20 +1842,20 @@ export default function Home() {
                     step={0.05}
                     value={explodeFactor}
                     onChange={(e) => setExplodeFactor(parseFloat(e.target.value))}
-                    className="w-full accent-[#FF9F43] h-1 bg-[#080A0E] cursor-pointer"
+                    className="w-full accent-[#D84A1B] h-1 bg-[#D8D2C7] cursor-pointer"
                   />
                 </div>
               )}
             </div>
 
             {/* Pitch Circle & Action Vector Toggle */}
-            <div className="pt-2 border-t border-[#2B3440]">
+            <div className="pt-2 border-t border-[#C8C1B4]">
               <button
                 onClick={() => setShowPitchVectors((p) => !p)}
                 className={`w-full px-2.5 py-1.5 text-xs font-mono flex items-center justify-between border transition-colors ${
                   showPitchVectors
-                    ? 'bg-[#10141B] text-[#56D6A0] border-[#56D6A0]'
-                    : 'bg-[#10141B] text-[#687484] border-[#2B3440]'
+                    ? 'bg-[#EAE5DC] text-[#1E5288] border-[#1E5288] font-semibold'
+                    : 'bg-[#F4F1EA] text-[#858078] border-[#C8C1B4]'
                 }`}
               >
                 <span className="flex items-center gap-2">
@@ -1852,13 +1867,13 @@ export default function Home() {
             </div>
 
             {/* Assembly Component Tree & Isolation */}
-            <div className="pt-2 border-t border-[#2B3440]">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[#687484] mb-1.5">
+            <div className="pt-2 border-t border-[#C8C1B4]">
+              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-[#858078] mb-1.5">
                 <span>ASSEMBLY TREE</span>
                 {isolatedComponent && (
                   <button
                     onClick={() => setIsolatedComponent(null)}
-                    className="text-[#FF9F43] hover:underline"
+                    className="text-[#D84A1B] font-semibold hover:underline"
                   >
                     SHOW ALL
                   </button>
@@ -1878,8 +1893,8 @@ export default function Home() {
                         }}
                         className={`flex-1 px-2 py-1 text-[11px] font-mono text-left truncate border transition-colors ${
                           isSel
-                            ? 'bg-[#10141B] text-[#FF9F43] border-[#FF9F43]'
-                            : 'bg-[#10141B]/60 text-[#A0AAB7] border-[#2B3440] hover:text-[#F3F5F7]'
+                            ? 'bg-[#EAE5DC] text-[#D84A1B] border-[#D84A1B] font-semibold'
+                            : 'bg-[#F4F1EA] text-[#52504C] border-[#C8C1B4] hover:text-[#181816] hover:border-[#858078]'
                         }`}
                       >
                         {item.name.split(' (')[0]}
@@ -1889,8 +1904,8 @@ export default function Home() {
                         title={isIso ? 'Restore Full Assembly' : 'Isolate Component'}
                         className={`px-1.5 py-1 text-[10px] font-mono border transition-colors ${
                           isIso
-                            ? 'bg-[#FF9F43] text-[#080A0E] border-[#FF9F43] font-bold'
-                            : 'bg-[#10141B] text-[#687484] border-[#2B3440] hover:text-[#F3F5F7]'
+                            ? 'bg-[#D84A1B] text-[#FAF8F5] border-[#D84A1B] font-bold'
+                            : 'bg-[#F4F1EA] text-[#858078] border-[#C8C1B4] hover:text-[#181816]'
                         }`}
                       >
                         <Focus className="w-3 h-3" />
@@ -1903,10 +1918,10 @@ export default function Home() {
           </aside>
 
           {/* BOTTOM FLOATING PLAYBACK CONTROLS */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-[#151B23]/95 border border-[#2B3440] px-3 py-2 flex items-center gap-3 shadow-2xl">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-[#FAF8F5]/95 border border-[#C8C1B4] px-3 py-2 flex items-center gap-3 shadow-md">
             <button
               onClick={() => setIsPlaying((p) => !p)}
-              className="px-3 py-1.5 bg-[#FF9F43] hover:bg-[#FFB866] text-[#080A0E] font-mono text-xs font-bold uppercase flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-[#D84A1B] hover:bg-[#B83B12] text-[#FAF8F5] font-mono text-xs font-bold uppercase flex items-center gap-1.5 transition-colors"
             >
               {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
               {isPlaying ? 'PAUSE' : 'DRIVE'}
@@ -1918,41 +1933,41 @@ export default function Home() {
                 setStepTrigger((s) => s + 1);
               }}
               title="Index Drive Pinion by Exactly 1 Circular Pitch (2π/N₁)"
-              className="px-2.5 py-1.5 bg-[#10141B] hover:border-[#FF9F43] text-[#F3F5F7] border border-[#2B3440] font-mono text-xs flex items-center gap-1 transition-colors"
+              className="px-2.5 py-1.5 bg-[#EAE5DC] hover:border-[#181816] text-[#181816] border border-[#C8C1B4] font-mono text-xs flex items-center gap-1 transition-colors"
             >
-              <StepForward className="w-3.5 h-3.5 text-[#FF9F43]" />
+              <StepForward className="w-3.5 h-3.5 text-[#D84A1B]" />
               <span>STEP 1T</span>
             </button>
 
             <button
               onClick={() => setParams((p) => ({ ...p, direction: p.direction === 1 ? -1 : 1 }))}
-              className="px-2.5 py-1.5 bg-[#10141B] hover:border-[#FF9F43] text-[#F3F5F7] border border-[#2B3440] font-mono text-xs flex items-center gap-1.5 transition-colors"
+              className="px-2.5 py-1.5 bg-[#EAE5DC] hover:border-[#181816] text-[#181816] border border-[#C8C1B4] font-mono text-xs flex items-center gap-1.5 transition-colors"
             >
-              <ArrowLeftRight className="w-3.5 h-3.5 text-[#FF9F43]" />
+              <ArrowLeftRight className="w-3.5 h-3.5 text-[#1E5288]" />
               <span>{params.direction === 1 ? 'CCW INPUT' : 'CW INPUT'}</span>
             </button>
 
             <button
               onClick={() => setResetTrigger((r) => r + 1)}
               title="Reset Angular Phase Alignment (Key: R)"
-              className="p-1.5 bg-[#10141B] hover:border-[#FF9F43] text-[#A0AAB7] hover:text-[#F3F5F7] border border-[#2B3440] transition-colors"
+              className="p-1.5 bg-[#EAE5DC] hover:border-[#181816] text-[#52504C] hover:text-[#181816] border border-[#C8C1B4] transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
 
-            <div className="h-4 w-[1px] bg-[#2B3440]" />
+            <div className="h-4 w-[1px] bg-[#C8C1B4]" />
 
             {/* Simulation Speed Multiplier */}
             <div className="flex items-center gap-1">
-              <span className="text-[10px] font-mono text-[#687484] mr-1 hidden sm:inline">TIME:</span>
+              <span className="text-[10px] font-mono text-[#858078] mr-1 hidden sm:inline">TIME:</span>
               {[0.1, 0.25, 0.5, 1.0, 2.0].map((spd) => (
                 <button
                   key={spd}
                   onClick={() => setSimSpeed(spd)}
                   className={`px-1.5 py-1 text-[10px] font-mono border transition-colors ${
                     simSpeed === spd
-                      ? 'bg-[#10141B] text-[#FF9F43] border-[#FF9F43] font-semibold'
-                      : 'bg-transparent text-[#687484] border-transparent hover:text-[#F3F5F7]'
+                      ? 'bg-[#181816] text-[#FAF8F5] border-[#181816] font-semibold'
+                      : 'bg-transparent text-[#52504C] border-transparent hover:text-[#181816]'
                   }`}
                 >
                   {spd}x
@@ -1963,11 +1978,11 @@ export default function Home() {
         </div>
 
         {/* =====================================================================
-            3. RIGHT CONTEXTUAL ENGINEERING PANEL
+            3. RIGHT CONTEXTUAL ENGINEERING PANEL (DRAFTING ARCHIVE SHEET)
            ===================================================================== */}
-        <aside className="w-full sm:w-[410px] bg-[#151B23] border-l border-[#2B3440] flex flex-col h-full z-20 shrink-0">
+        <aside className="w-full sm:w-[410px] bg-[#EAE5DC] border-l border-[#C8C1B4] flex flex-col h-full z-20 shrink-0">
           {/* Mobile Tab Switcher */}
-          <div className="flex md:hidden border-b border-[#2B3440] bg-[#10141B]">
+          <div className="flex md:hidden border-b border-[#C8C1B4] bg-[#F4F1EA]">
             {(
               [
                 { id: 'parametric', label: 'PARAMS' },
@@ -1981,8 +1996,8 @@ export default function Home() {
                 onClick={() => setActiveTab(t.id)}
                 className={`flex-1 py-2 text-[10px] font-mono uppercase border-b-2 ${
                   activeTab === t.id
-                    ? 'border-[#FF9F43] text-[#FF9F43] bg-[#151B23]'
-                    : 'border-transparent text-[#687484]'
+                    ? 'border-[#D84A1B] text-[#D84A1B] bg-[#FAF8F5] font-bold'
+                    : 'border-transparent text-[#52504C]'
                 }`}
               >
                 {t.label}
@@ -1998,58 +2013,58 @@ export default function Home() {
             {activeTab === 'parametric' && (
               <>
                 {/* Section Header */}
-                <div className="border-b border-[#2B3440] pb-2.5 flex items-center justify-between">
+                <div className="border-b border-[#C8C1B4] pb-2.5 flex items-center justify-between">
                   <div>
                     <h2
-                      className="text-sm font-bold uppercase tracking-wider text-[#F3F5F7]"
+                      className="text-sm font-bold uppercase tracking-wider text-[#181816]"
                       style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                     >
                       KINEMATIC & GEOMETRY SYNTHESIS
                     </h2>
-                    <p className="text-xs text-[#687484]">
+                    <p className="text-xs text-[#52504C]">
                       Real-time involute profile regeneration & torque telemetry
                     </p>
                   </div>
-                  <Activity className="w-4 h-4 text-[#FF9F43]" />
+                  <Activity className="w-4 h-4 text-[#D84A1B]" />
                 </div>
 
                 {/* Quick Engineering Stage Presets */}
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#687484] block mb-1.5">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#858078] block mb-1.5">
                     STANDARD TRANSMISSION PRESETS
                   </span>
                   <div className="grid grid-cols-3 gap-1.5">
                     <button
                       onClick={() => applyQuickPreset(16, 48, 2.5, 1200, 150)}
-                      className="px-2 py-1.5 bg-[#10141B] hover:border-[#FF9F43] border border-[#2B3440] text-left transition-colors"
+                      className="px-2 py-1.5 bg-[#FAF8F5] hover:border-[#D84A1B] border border-[#C8C1B4] text-left transition-colors"
                     >
-                      <div className="text-[11px] font-mono font-bold text-[#F3F5F7]">3.00:1 REDUCER</div>
-                      <div className="text-[9px] font-mono text-[#687484]">16T → 48T | m=2.5</div>
+                      <div className="text-[11px] font-mono font-bold text-[#181816]">3.00:1 REDUCER</div>
+                      <div className="text-[9px] font-mono text-[#52504C]">16T → 48T | m=2.5</div>
                     </button>
                     <button
                       onClick={() => applyQuickPreset(24, 24, 3.0, 900, 100)}
-                      className="px-2 py-1.5 bg-[#10141B] hover:border-[#FF9F43] border border-[#2B3440] text-left transition-colors"
+                      className="px-2 py-1.5 bg-[#FAF8F5] hover:border-[#D84A1B] border border-[#C8C1B4] text-left transition-colors"
                     >
-                      <div className="text-[11px] font-mono font-bold text-[#F3F5F7]">1.00:1 SYNC</div>
-                      <div className="text-[9px] font-mono text-[#687484]">24T → 24T | m=3.0</div>
+                      <div className="text-[11px] font-mono font-bold text-[#181816]">1.00:1 SYNC</div>
+                      <div className="text-[9px] font-mono text-[#52504C]">24T → 24T | m=3.0</div>
                     </button>
                     <button
                       onClick={() => applyQuickPreset(32, 16, 2.5, 600, 80)}
-                      className="px-2 py-1.5 bg-[#10141B] hover:border-[#FF9F43] border border-[#2B3440] text-left transition-colors"
+                      className="px-2 py-1.5 bg-[#FAF8F5] hover:border-[#D84A1B] border border-[#C8C1B4] text-left transition-colors"
                     >
-                      <div className="text-[11px] font-mono font-bold text-[#F3F5F7]">0.50:1 OVERDRIVE</div>
-                      <div className="text-[9px] font-mono text-[#687484]">32T → 16T | m=2.5</div>
+                      <div className="text-[11px] font-mono font-bold text-[#181816]">0.50:1 OVERDRIVE</div>
+                      <div className="text-[9px] font-mono text-[#52504C]">32T → 16T | m=2.5</div>
                     </button>
                   </div>
                 </div>
 
                 {/* Parametric Sliders */}
-                <div className="space-y-3.5 bg-[#10141B] p-3.5 border border-[#2B3440]">
+                <div className="space-y-3.5 bg-[#FAF8F5] p-3.5 border border-[#C8C1B4]">
                   {/* Drive Pinion Teeth N1 */}
                   <div>
                     <div className="flex justify-between text-xs font-mono mb-1">
-                      <span className="text-[#A0AAB7]">DRIVE PINION TEETH (N₁)</span>
-                      <span className="text-[#FF9F43] font-bold">{params.n1} TEETH</span>
+                      <span className="text-[#52504C]">DRIVE PINION TEETH (N₁)</span>
+                      <span className="text-[#D84A1B] font-bold">{params.n1} TEETH</span>
                     </div>
                     <input
                       type="range"
@@ -2058,9 +2073,9 @@ export default function Home() {
                       step={1}
                       value={params.n1}
                       onChange={(e) => setParams((p) => ({ ...p, n1: parseInt(e.target.value, 10) }))}
-                      className="w-full accent-[#FF9F43] h-1.5 bg-[#080A0E] cursor-pointer"
+                      className="w-full accent-[#D84A1B] h-1.5 bg-[#DFD9CE] cursor-pointer"
                     />
-                    <div className="flex justify-between text-[10px] font-mono text-[#687484] mt-0.5">
+                    <div className="flex justify-between text-[10px] font-mono text-[#858078] mt-0.5">
                       <span>12T (Min Undercut Limit)</span>
                       <span>Pitch Ø: {kinematics.pitchDiameter1.toFixed(1)} mm</span>
                     </div>
@@ -2069,8 +2084,8 @@ export default function Home() {
                   {/* Driven Gear Teeth N2 */}
                   <div>
                     <div className="flex justify-between text-xs font-mono mb-1">
-                      <span className="text-[#A0AAB7]">DRIVEN GEAR TEETH (N₂)</span>
-                      <span className="text-[#56D6A0] font-bold">{params.n2} TEETH</span>
+                      <span className="text-[#52504C]">DRIVEN GEAR TEETH (N₂)</span>
+                      <span className="text-[#1E5288] font-bold">{params.n2} TEETH</span>
                     </div>
                     <input
                       type="range"
@@ -2079,9 +2094,9 @@ export default function Home() {
                       step={1}
                       value={params.n2}
                       onChange={(e) => setParams((p) => ({ ...p, n2: parseInt(e.target.value, 10) }))}
-                      className="w-full accent-[#56D6A0] h-1.5 bg-[#080A0E] cursor-pointer"
+                      className="w-full accent-[#1E5288] h-1.5 bg-[#DFD9CE] cursor-pointer"
                     />
-                    <div className="flex justify-between text-[10px] font-mono text-[#687484] mt-0.5">
+                    <div className="flex justify-between text-[10px] font-mono text-[#858078] mt-0.5">
                       <span>12T</span>
                       <span>Pitch Ø: {kinematics.pitchDiameter2.toFixed(1)} mm</span>
                     </div>
@@ -2090,8 +2105,8 @@ export default function Home() {
                   {/* Metric Module (m) */}
                   <div>
                     <div className="flex justify-between text-xs font-mono mb-1">
-                      <span className="text-[#A0AAB7]">METRIC MODULE (m)</span>
-                      <span className="text-[#F3F5F7] font-bold">{params.module.toFixed(1)} mm</span>
+                      <span className="text-[#52504C]">METRIC MODULE (m)</span>
+                      <span className="text-[#181816] font-bold">{params.module.toFixed(1)} mm</span>
                     </div>
                     <input
                       type="range"
@@ -2100,9 +2115,9 @@ export default function Home() {
                       step={0.5}
                       value={params.module}
                       onChange={(e) => setParams((p) => ({ ...p, module: parseFloat(e.target.value) }))}
-                      className="w-full accent-[#FF9F43] h-1.5 bg-[#080A0E] cursor-pointer"
+                      className="w-full accent-[#181816] h-1.5 bg-[#DFD9CE] cursor-pointer"
                     />
-                    <div className="flex justify-between text-[10px] font-mono text-[#687484] mt-0.5">
+                    <div className="flex justify-between text-[10px] font-mono text-[#858078] mt-0.5">
                       <span>ISO 54 Standard</span>
                       <span>Circular Pitch p: {kinematics.circularPitch.toFixed(2)} mm</span>
                     </div>
@@ -2111,8 +2126,8 @@ export default function Home() {
                   {/* Input Speed RPM1 */}
                   <div>
                     <div className="flex justify-between text-xs font-mono mb-1">
-                      <span className="text-[#A0AAB7]">INPUT ANGULAR SPEED (RPM₁)</span>
-                      <span className="text-[#FF9F43] font-bold">
+                      <span className="text-[#52504C]">INPUT ANGULAR SPEED (RPM₁)</span>
+                      <span className="text-[#D84A1B] font-bold">
                         {params.rpm1} RPM ({params.direction === 1 ? 'CCW' : 'CW'})
                       </span>
                     </div>
@@ -2123,15 +2138,15 @@ export default function Home() {
                       step={25}
                       value={params.rpm1}
                       onChange={(e) => setParams((p) => ({ ...p, rpm1: parseInt(e.target.value, 10) }))}
-                      className="w-full accent-[#FF9F43] h-1.5 bg-[#080A0E] cursor-pointer"
+                      className="w-full accent-[#D84A1B] h-1.5 bg-[#DFD9CE] cursor-pointer"
                     />
                   </div>
 
                   {/* Input Torque */}
                   <div>
                     <div className="flex justify-between text-xs font-mono mb-1">
-                      <span className="text-[#A0AAB7]">INPUT SHAFT TORQUE (τ_in)</span>
-                      <span className="text-[#F3F5F7] font-bold">{params.torqueIn} Nm</span>
+                      <span className="text-[#52504C]">INPUT SHAFT TORQUE (τ_in)</span>
+                      <span className="text-[#181816] font-bold">{params.torqueIn} Nm</span>
                     </div>
                     <input
                       type="range"
@@ -2140,7 +2155,7 @@ export default function Home() {
                       step={5}
                       value={params.torqueIn}
                       onChange={(e) => setParams((p) => ({ ...p, torqueIn: parseInt(e.target.value, 10) }))}
-                      className="w-full accent-[#FF9F43] h-1.5 bg-[#080A0E] cursor-pointer"
+                      className="w-full accent-[#181816] h-1.5 bg-[#DFD9CE] cursor-pointer"
                     />
                   </div>
                 </div>
@@ -2148,49 +2163,49 @@ export default function Home() {
                 {/* Live Engineering Telemetry Readout Grid */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#687484]">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#858078]">
                       REAL-TIME KINEMATIC TELEMETRY
                     </span>
-                    <span className="text-[10px] font-mono text-[#56D6A0]">η = 98.5% MESH EFF</span>
+                    <span className="text-[10px] font-mono text-[#1E6F50] font-semibold">η = 98.5% MESH EFF</span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-[#10141B] border border-[#2B3440] p-2.5">
-                      <div className="text-[10px] font-mono text-[#687484]">TRANSMISSION RATIO (i)</div>
-                      <div className="text-lg font-mono font-bold text-[#FF9F43] mt-0.5">
+                    <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-2.5">
+                      <div className="text-[10px] font-mono text-[#858078]">TRANSMISSION RATIO (i)</div>
+                      <div className="text-lg font-mono font-bold text-[#D84A1B] mt-0.5">
                         {kinematics.ratio.toFixed(3)} : 1
                       </div>
-                      <div className="text-[10px] font-mono text-[#A0AAB7] mt-0.5">
+                      <div className="text-[10px] font-mono text-[#52504C] mt-0.5">
                         {kinematics.classification}
                       </div>
                     </div>
 
-                    <div className="bg-[#10141B] border border-[#2B3440] p-2.5">
-                      <div className="text-[10px] font-mono text-[#687484]">OUTPUT SPEED (RPM₂)</div>
-                      <div className="text-lg font-mono font-bold text-[#56D6A0] mt-0.5">
+                    <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-2.5">
+                      <div className="text-[10px] font-mono text-[#858078]">OUTPUT SPEED (RPM₂)</div>
+                      <div className="text-lg font-mono font-bold text-[#1E5288] mt-0.5">
                         {Math.abs(kinematics.rpm2).toFixed(1)} RPM
                       </div>
-                      <div className="text-[10px] font-mono text-[#A0AAB7] mt-0.5">
+                      <div className="text-[10px] font-mono text-[#52504C] mt-0.5">
                         Dir: {kinematics.rpm2 < 0 ? 'CW (Opposing)' : kinematics.rpm2 > 0 ? 'CCW (Opposing)' : 'Static'}
                       </div>
                     </div>
 
-                    <div className="bg-[#10141B] border border-[#2B3440] p-2.5">
-                      <div className="text-[10px] font-mono text-[#687484]">OUTPUT TORQUE (τ_out)</div>
-                      <div className="text-lg font-mono font-bold text-[#F3F5F7] mt-0.5">
+                    <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-2.5">
+                      <div className="text-[10px] font-mono text-[#858078]">OUTPUT TORQUE (τ_out)</div>
+                      <div className="text-lg font-mono font-bold text-[#181816] mt-0.5">
                         {kinematics.torqueOut.toFixed(1)} Nm
                       </div>
-                      <div className="text-[10px] font-mono text-[#687484] mt-0.5">
+                      <div className="text-[10px] font-mono text-[#52504C] mt-0.5">
                         Power: {kinematics.powerKw.toFixed(2)} kW
                       </div>
                     </div>
 
-                    <div className="bg-[#10141B] border border-[#2B3440] p-2.5">
-                      <div className="text-[10px] font-mono text-[#687484]">CENTER DISTANCE (C)</div>
-                      <div className="text-lg font-mono font-bold text-[#F3F5F7] mt-0.5">
+                    <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-2.5">
+                      <div className="text-[10px] font-mono text-[#858078]">CENTER DISTANCE (C)</div>
+                      <div className="text-lg font-mono font-bold text-[#181816] mt-0.5">
                         {kinematics.centerDistance.toFixed(2)} mm
                       </div>
-                      <div className="text-[10px] font-mono text-[#687484] mt-0.5">
+                      <div className="text-[10px] font-mono text-[#52504C] mt-0.5">
                         v_p: {kinematics.pitchLineVelocity.toFixed(2)} m/s
                       </div>
                     </div>
@@ -2198,25 +2213,25 @@ export default function Home() {
                 </div>
 
                 {/* Tooth Mesh Load & Contact Quality Bar */}
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-[#A0AAB7]">TRANSVERSE CONTACT RATIO (ε_α)</span>
+                    <span className="text-[#52504C]">TRANSVERSE CONTACT RATIO (ε_α)</span>
                     <span
                       className={`font-bold ${
-                        kinematics.contactRatio >= 1.4 ? 'text-[#56D6A0]' : 'text-[#FF6B6B]'
+                        kinematics.contactRatio >= 1.4 ? 'text-[#1E6F50]' : 'text-[#C93B2B]'
                       }`}
                     >
                       {kinematics.contactRatio.toFixed(3)} {kinematics.contactRatio >= 1.4 ? '(OPTIMAL > 1.4)' : '(LOW)'}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#2B3440] text-[11px] font-mono">
+                  <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#C8C1B4] text-[11px] font-mono">
                     <div>
-                      <span className="text-[#687484] block">TANGENTIAL LOAD (F_t)</span>
-                      <span className="text-[#F3F5F7] font-semibold">{kinematics.tangentialForce.toFixed(0)} N</span>
+                      <span className="text-[#858078] block">TANGENTIAL LOAD (F_t)</span>
+                      <span className="text-[#181816] font-semibold">{kinematics.tangentialForce.toFixed(0)} N</span>
                     </div>
                     <div>
-                      <span className="text-[#687484] block">RADIAL SEPARATING (F_r)</span>
-                      <span className="text-[#F3F5F7] font-semibold">{kinematics.radialForce.toFixed(0)} N</span>
+                      <span className="text-[#858078] block">RADIAL SEPARATING (F_r)</span>
+                      <span className="text-[#181816] font-semibold">{kinematics.radialForce.toFixed(0)} N</span>
                     </div>
                   </div>
                 </div>
@@ -2228,12 +2243,12 @@ export default function Home() {
                ----------------------------------------------------------------- */}
             {activeTab === 'inspector' && (
               <div className="space-y-4">
-                <div className="border-b border-[#2B3440] pb-2.5">
-                  <div className="text-[10px] font-mono text-[#FF9F43] uppercase">
+                <div className="border-b border-[#C8C1B4] pb-2.5">
+                  <div className="text-[10px] font-mono text-[#D84A1B] font-semibold uppercase">
                     {currentComponentMeta.code}
                   </div>
                   <h2
-                    className="text-base font-bold text-[#F3F5F7] mt-0.5"
+                    className="text-base font-bold text-[#181816] mt-0.5"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     {currentComponentMeta.name}
@@ -2248,8 +2263,8 @@ export default function Home() {
                       onClick={() => setSelectedComponent(id)}
                       className={`px-2 py-1.5 text-[10px] font-mono uppercase border transition-colors ${
                         selectedComponent === id
-                          ? 'bg-[#FF9F43] text-[#080A0E] border-[#FF9F43] font-bold'
-                          : 'bg-[#10141B] text-[#A0AAB7] border-[#2B3440] hover:text-[#F3F5F7]'
+                          ? 'bg-[#181816] text-[#FAF8F5] border-[#181816] font-bold'
+                          : 'bg-[#FAF8F5] text-[#52504C] border-[#C8C1B4] hover:text-[#181816]'
                       }`}
                     >
                       {id.replace('_', ' ')}
@@ -2258,37 +2273,37 @@ export default function Home() {
                 </div>
 
                 {/* Metallurgical & Metrology Specs */}
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2.5 font-mono text-xs">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2.5 font-mono text-xs">
                   <div>
-                    <span className="text-[10px] text-[#687484] block">ALLOY SPECIFICATION</span>
-                    <span className="text-[#F3F5F7]">{currentComponentMeta.material}</span>
+                    <span className="text-[10px] text-[#858078] block">ALLOY SPECIFICATION</span>
+                    <span className="text-[#181816] font-medium">{currentComponentMeta.material}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#2B3440]">
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#C8C1B4]">
                     <div>
-                      <span className="text-[10px] text-[#687484] block">SURFACE HARDNESS</span>
-                      <span className="text-[#FF9F43]">{currentComponentMeta.hardness}</span>
+                      <span className="text-[10px] text-[#858078] block">SURFACE HARDNESS</span>
+                      <span className="text-[#D84A1B] font-semibold">{currentComponentMeta.hardness}</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-[#687484] block">ESTIMATED MASS</span>
-                      <span className="text-[#56D6A0]">{currentComponentMeta.massKg.toFixed(2)} kg</span>
+                      <span className="text-[10px] text-[#858078] block">ESTIMATED MASS</span>
+                      <span className="text-[#1E6F50] font-semibold">{currentComponentMeta.massKg.toFixed(2)} kg</span>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-[#2B3440]">
-                    <span className="text-[10px] text-[#687484] block">SURFACE METROLOGY</span>
-                    <span className="text-[#A0AAB7]">{currentComponentMeta.surfaceFinish}</span>
+                  <div className="pt-2 border-t border-[#C8C1B4]">
+                    <span className="text-[10px] text-[#858078] block">SURFACE METROLOGY</span>
+                    <span className="text-[#52504C]">{currentComponentMeta.surfaceFinish}</span>
                   </div>
                 </div>
 
                 {/* Dynamic Dimensional Readout for Gears */}
                 {(selectedComponent === 'pinion' || selectedComponent === 'gear') && (
-                  <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2">
-                    <div className="text-[10px] font-mono uppercase text-[#FF9F43]">
+                  <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2">
+                    <div className="text-[10px] font-mono uppercase text-[#1E5288] font-semibold">
                       LIVE INVOLUTE DIMENSIONAL TABLE ({selectedComponent === 'pinion' ? 'G₁ PINION' : 'G₂ WHEEL'})
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono text-[#181816]">
                       <div>
-                        <span className="text-[10px] text-[#687484] block">PITCH DIAMETER (d)</span>
-                        <span>
+                        <span className="text-[10px] text-[#858078] block">PITCH DIAMETER (d)</span>
+                        <span className="font-semibold">
                           {(selectedComponent === 'pinion'
                             ? kinematics.pitchDiameter1
                             : kinematics.pitchDiameter2
@@ -2297,8 +2312,8 @@ export default function Home() {
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-[#687484] block">OUTER TIP Ø (d_a)</span>
-                        <span>
+                        <span className="text-[10px] text-[#858078] block">OUTER TIP Ø (d_a)</span>
+                        <span className="font-semibold">
                           {(selectedComponent === 'pinion'
                             ? kinematics.outerDiameter1
                             : kinematics.outerDiameter2
@@ -2307,8 +2322,8 @@ export default function Home() {
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-[#687484] block">BASE CIRCLE Ø (d_b)</span>
-                        <span>
+                        <span className="text-[10px] text-[#858078] block">BASE CIRCLE Ø (d_b)</span>
+                        <span className="font-semibold">
                           {(selectedComponent === 'pinion'
                             ? kinematics.baseDiameter1
                             : kinematics.baseDiameter2
@@ -2317,8 +2332,8 @@ export default function Home() {
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-[#687484] block">ROOT CIRCLE Ø (d_f)</span>
-                        <span>
+                        <span className="text-[10px] text-[#858078] block">ROOT CIRCLE Ø (d_f)</span>
+                        <span className="font-semibold">
                           {(selectedComponent === 'pinion'
                             ? kinematics.rootDiameter1
                             : kinematics.rootDiameter2
@@ -2331,14 +2346,14 @@ export default function Home() {
                 )}
 
                 {/* Engineering Function & Design Notes */}
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2 text-xs">
-                  <div className="text-[10px] font-mono uppercase text-[#687484]">FUNCTIONAL ANALYSIS</div>
-                  <p className="text-[#A0AAB7] leading-relaxed">{currentComponentMeta.description}</p>
-                  <div className="pt-2 border-t border-[#2B3440]">
-                    <span className="text-[10px] font-mono uppercase text-[#FF9F43] block mb-1">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2 text-xs">
+                  <div className="text-[10px] font-mono uppercase text-[#858078]">FUNCTIONAL ANALYSIS</div>
+                  <p className="text-[#52504C] leading-relaxed">{currentComponentMeta.description}</p>
+                  <div className="pt-2 border-t border-[#C8C1B4]">
+                    <span className="text-[10px] font-mono uppercase text-[#D84A1B] font-semibold block mb-1">
                       STRESS & TRIBOLOGY NOTE
                     </span>
-                    <p className="text-[#A0AAB7] leading-relaxed">{currentComponentMeta.engineeringNotes}</p>
+                    <p className="text-[#52504C] leading-relaxed">{currentComponentMeta.engineeringNotes}</p>
                   </div>
                 </div>
               </div>
@@ -2349,14 +2364,14 @@ export default function Home() {
                ----------------------------------------------------------------- */}
             {activeTab === 'academy' && (
               <div className="space-y-4">
-                <div className="border-b border-[#2B3440] pb-2.5">
+                <div className="border-b border-[#C8C1B4] pb-2.5">
                   <h2
-                    className="text-sm font-bold uppercase tracking-wider text-[#F3F5F7]"
+                    className="text-sm font-bold uppercase tracking-wider text-[#181816]"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     ENGINEERING DESIGN CHALLENGES & FORMULAS
                   </h2>
-                  <p className="text-xs text-[#687484]">
+                  <p className="text-xs text-[#52504C]">
                     Validate transmission synthesis against industrial constraints
                   </p>
                 </div>
@@ -2372,12 +2387,12 @@ export default function Home() {
                           onClick={() => setActiveChallengeIdx(idx)}
                           className={`flex-1 py-1.5 px-2 text-[10px] font-mono border flex items-center justify-center gap-1 transition-colors ${
                             activeChallengeIdx === idx
-                              ? 'bg-[#10141B] text-[#FF9F43] border-[#FF9F43] font-bold'
-                              : 'bg-[#10141B]/50 text-[#A0AAB7] border-[#2B3440]'
+                              ? 'bg-[#181816] text-[#FAF8F5] border-[#181816] font-bold'
+                              : 'bg-[#FAF8F5] text-[#52504C] border-[#C8C1B4]'
                           }`}
                         >
                           <span>STAGE 0{ch.id}</span>
-                          {status.passed && <CheckCircle2 className="w-3 h-3 text-[#56D6A0]" />}
+                          {status.passed && <CheckCircle2 className="w-3 h-3 text-[#1E6F50]" />}
                         </button>
                       );
                     })}
@@ -2391,46 +2406,46 @@ export default function Home() {
                       <div
                         className={`p-3.5 border transition-colors ${
                           status.passed
-                            ? 'bg-[#10141B] border-[#56D6A0]'
-                            : 'bg-[#10141B] border-[#2B3440]'
+                            ? 'bg-[#FAF8F5] border-[#1E6F50]'
+                            : 'bg-[#FAF8F5] border-[#C8C1B4]'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] font-mono text-[#FF9F43]">{ch.code}</span>
+                          <span className="text-[10px] font-mono text-[#D84A1B] font-semibold">{ch.code}</span>
                           <span
                             className={`px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase ${
                               status.passed
-                                ? 'bg-[#56D6A0] text-[#080A0E]'
-                                : 'bg-[#2B3440] text-[#A0AAB7]'
+                                ? 'bg-[#1E6F50] text-[#FAF8F5]'
+                                : 'bg-[#EAE5DC] text-[#52504C]'
                             }`}
                           >
                             {status.passed ? 'VERIFIED PASS' : 'IN PROGRESS'}
                           </span>
                         </div>
-                        <h3 className="text-xs font-bold text-[#F3F5F7] mb-1">{ch.title}</h3>
-                        <p className="text-xs text-[#A0AAB7] leading-relaxed mb-2.5">{ch.objective}</p>
+                        <h3 className="text-xs font-bold text-[#181816] mb-1">{ch.title}</h3>
+                        <p className="text-xs text-[#52504C] leading-relaxed mb-2.5">{ch.objective}</p>
 
                         <div className="space-y-1 mb-2.5">
                           {ch.constraints.map((c, i) => (
-                            <div key={i} className="text-[11px] font-mono text-[#F3F5F7] flex items-center gap-1.5">
-                              <ChevronRight className="w-3 h-3 text-[#FF9F43]" />
+                            <div key={i} className="text-[11px] font-mono text-[#181816] flex items-center gap-1.5">
+                              <ChevronRight className="w-3 h-3 text-[#D84A1B]" />
                               {c}
                             </div>
                           ))}
                         </div>
 
-                        <div className="p-2 bg-[#080A0E] border border-[#2B3440] text-[10px] font-mono text-[#A0AAB7] mb-2">
+                        <div className="p-2 bg-[#F4F1EA] border border-[#C8C1B4] text-[10px] font-mono text-[#52504C] mb-2">
                           {status.progressText}
                         </div>
 
-                        <div className="text-[11px] text-[#687484] italic">
-                          <strong className="text-[#A0AAB7] not-italic">Hint: </strong>
+                        <div className="text-[11px] text-[#858078] italic">
+                          <strong className="text-[#181816] not-italic">Hint: </strong>
                           {ch.hint}
                         </div>
 
                         <button
                           onClick={() => setActiveTab('parametric')}
-                          className="mt-2.5 w-full py-1.5 bg-[#151B23] hover:border-[#FF9F43] text-[#FF9F43] border border-[#2B3440] text-[10px] font-mono uppercase transition-colors"
+                          className="mt-2.5 w-full py-1.5 bg-[#181816] hover:bg-[#D84A1B] text-[#FAF8F5] text-[10px] font-mono uppercase transition-colors"
                         >
                           OPEN PARAMETRIC SLIDERS TO SOLVE →
                         </button>
@@ -2440,56 +2455,56 @@ export default function Home() {
                 </div>
 
                 {/* Live Substituted Formula Sheet */}
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2.5">
-                  <div className="text-[10px] font-mono uppercase text-[#FF9F43]">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2.5">
+                  <div className="text-[10px] font-mono uppercase text-[#1E5288] font-semibold">
                     FUNDAMENTAL GEAR KINEMATICS (LIVE SUBSTITUTION)
                   </div>
                   <div className="space-y-2 font-mono text-[11px]">
-                    <div className="p-2 bg-[#080A0E] border border-[#2B3440]">
-                      <div className="text-[#687484] text-[10px]">1. FUNDAMENTAL LAW OF GEARING RATIO</div>
-                      <div className="text-[#F3F5F7] mt-0.5">
+                    <div className="p-2 bg-[#F4F1EA] border border-[#C8C1B4]">
+                      <div className="text-[#858078] text-[10px]">1. FUNDAMENTAL LAW OF GEARING RATIO</div>
+                      <div className="text-[#181816] mt-0.5">
                         i = N₂ / N₁ = {params.n2} / {params.n1} ={' '}
-                        <span className="text-[#FF9F43] font-bold">{kinematics.ratio.toFixed(3)}</span>
+                        <span className="text-[#D84A1B] font-bold">{kinematics.ratio.toFixed(3)}</span>
                       </div>
                     </div>
-                    <div className="p-2 bg-[#080A0E] border border-[#2B3440]">
-                      <div className="text-[#687484] text-[10px]">2. STANDARD SHAFT CENTER DISTANCE</div>
-                      <div className="text-[#F3F5F7] mt-0.5">
+                    <div className="p-2 bg-[#F4F1EA] border border-[#C8C1B4]">
+                      <div className="text-[#858078] text-[10px]">2. STANDARD SHAFT CENTER DISTANCE</div>
+                      <div className="text-[#181816] mt-0.5">
                         C = m·(N₁ + N₂)/2 = {params.module}·({params.n1}+{params.n2})/2 ={' '}
-                        <span className="text-[#56D6A0] font-bold">{kinematics.centerDistance.toFixed(1)} mm</span>
+                        <span className="text-[#1E6F50] font-bold">{kinematics.centerDistance.toFixed(1)} mm</span>
                       </div>
                     </div>
-                    <div className="p-2 bg-[#080A0E] border border-[#2B3440]">
-                      <div className="text-[#687484] text-[10px]">3. CONJUGATE OUTPUT SPEED & TORQUE</div>
-                      <div className="text-[#F3F5F7] mt-0.5">
+                    <div className="p-2 bg-[#F4F1EA] border border-[#C8C1B4]">
+                      <div className="text-[#858078] text-[10px]">3. CONJUGATE OUTPUT SPEED & TORQUE</div>
+                      <div className="text-[#181816] mt-0.5">
                         ω₂ = -ω₁ / i = {kinematics.rpm2.toFixed(1)} RPM | τ_out = τ_in·i·η ={' '}
-                        <span className="text-[#FF9F43] font-bold">{kinematics.torqueOut.toFixed(1)} Nm</span>
+                        <span className="text-[#1E5288] font-bold">{kinematics.torqueOut.toFixed(1)} Nm</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Gear Tooth Anatomy Glossary */}
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2 text-xs">
-                  <div className="text-[10px] font-mono uppercase text-[#687484]">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2 text-xs">
+                  <div className="text-[10px] font-mono uppercase text-[#858078]">
                     INVOLUTE TOOTH ANATOMY REFERENCE
                   </div>
                   <div className="space-y-1.5 text-[11px]">
                     <div>
-                      <span className="text-[#FF9F43] font-mono font-semibold">Pitch Circle (d = m·N): </span>
-                      <span className="text-[#A0AAB7]">
+                      <span className="text-[#D84A1B] font-mono font-semibold">Pitch Circle (d = m·N): </span>
+                      <span className="text-[#52504C]">
                         Imaginary tangent circles that roll without slipping at the Pitch Point (P).
                       </span>
                     </div>
                     <div>
-                      <span className="text-[#56D6A0] font-mono font-semibold">Pressure Angle (α = 20°): </span>
-                      <span className="text-[#A0AAB7]">
+                      <span className="text-[#1E5288] font-mono font-semibold">Pressure Angle (α = 20°): </span>
+                      <span className="text-[#52504C]">
                         Angle between the Line of Action and the common tangent to the pitch circles.
                       </span>
                     </div>
                     <div>
-                      <span className="text-[#F3F5F7] font-mono font-semibold">Addendum (h_a = 1.0m) & Dedendum (h_f = 1.25m): </span>
-                      <span className="text-[#A0AAB7]">
+                      <span className="text-[#181816] font-mono font-semibold">Addendum (h_a = 1.0m) & Dedendum (h_f = 1.25m): </span>
+                      <span className="text-[#52504C]">
                         Radial tooth height above and below the pitch circle, providing 0.25m root clearance.
                       </span>
                     </div>
@@ -2503,28 +2518,28 @@ export default function Home() {
                ----------------------------------------------------------------- */}
             {activeTab === 'architecture' && (
               <div className="space-y-4">
-                <div className="border-b border-[#2B3440] pb-2.5">
+                <div className="border-b border-[#C8C1B4] pb-2.5">
                   <h2
-                    className="text-sm font-bold uppercase tracking-wider text-[#F3F5F7]"
+                    className="text-sm font-bold uppercase tracking-wider text-[#181816]"
                     style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     NEXT.JS APP ROUTER & 3D ARCHITECTURE
                   </h2>
-                  <p className="text-xs text-[#687484]">
+                  <p className="text-xs text-[#52504C]">
                     Production modular structure & performance engineering notes
                   </p>
                 </div>
 
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2 text-xs font-mono">
-                  <div className="text-[10px] text-[#FF9F43] uppercase">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2 text-xs font-mono">
+                  <div className="text-[10px] text-[#D84A1B] font-semibold uppercase">
                     RECOMMENDED NEXT.JS 14/15 DIRECTORY TREE
                   </div>
-                  <pre className="text-[11px] text-[#A0AAB7] overflow-x-auto leading-relaxed">
+                  <pre className="text-[11px] text-[#52504C] overflow-x-auto leading-relaxed">
 {`src/
 ├── app/
 │   ├── layout.tsx          # Space Grotesk, Inter, JetBrains Mono
 │   ├── page.tsx            # Server entry + dynamic('GearLabClient')
-│   └── globals.css         # Tailwind & #080A0E industrial tokens
+│   └── globals.css         # Tailwind & #F4F1EA archival tokens
 ├── components/
 │   ├── canvas/
 │   │   ├── GearCanvas.tsx  # Client-only R3F <Canvas> wrapper
@@ -2541,30 +2556,30 @@ export default function Home() {
                   </pre>
                 </div>
 
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-2 text-xs">
-                  <div className="text-[10px] font-mono text-[#56D6A0] uppercase">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-2 text-xs">
+                  <div className="text-[10px] font-mono text-[#1E6F50] font-semibold uppercase">
                     KEY ARCHITECTURAL GUARANTEES
                   </div>
-                  <ul className="space-y-1.5 text-[11px] text-[#A0AAB7] list-disc pl-4">
+                  <ul className="space-y-1.5 text-[11px] text-[#52504C] list-disc pl-4">
                     <li>
-                      <strong className="text-[#F3F5F7]">Zero Per-Frame React Re-Renders:</strong> Angular velocities{' '}
+                      <strong className="text-[#181816]">Zero Per-Frame React Re-Renders:</strong> Angular velocities{' '}
                       <code>θ₁</code> and <code>θ₂ = -θ₁(N₁/N₂) + φ_mesh</code> are mutated directly on{' '}
-                      <code>THREE.Group</code> refs inside <code>useFrame</code>.
+                      <code>THREE.Group</code> refs inside the animation loop.
                     </li>
                     <li>
-                      <strong className="text-[#F3F5F7]">True Involute Profile Generation:</strong> Teeth are generated via parametric involute equations{' '}
+                      <strong className="text-[#181816]">True Involute Profile Generation:</strong> Teeth are generated via parametric involute equations{' '}
                       <code>inv(φ) = tan(φ) - φ</code> with 20° pressure angle, root clearance, and keyway slots.
                     </li>
                     <li>
-                      <strong className="text-[#F3F5F7]">SSR-Safe Next.js Hydration:</strong> Load the R3F canvas with{' '}
+                      <strong className="text-[#181816]">SSR-Safe Next.js Hydration:</strong> Load the 3D canvas with{' '}
                       <code>next/dynamic(..., &#123; ssr: false &#125;)</code> to guarantee clean client WebGL initialization.
                     </li>
                   </ul>
                 </div>
 
-                <div className="bg-[#10141B] border border-[#2B3440] p-3 space-y-1.5 text-xs font-mono">
-                  <div className="text-[10px] text-[#687484] uppercase">INSTALL DEPENDENCIES</div>
-                  <div className="p-2 bg-[#080A0E] border border-[#2B3440] text-[10px] text-[#FF9F43] select-all">
+                <div className="bg-[#FAF8F5] border border-[#C8C1B4] p-3 space-y-1.5 text-xs font-mono">
+                  <div className="text-[10px] text-[#858078] uppercase">INSTALL DEPENDENCIES</div>
+                  <div className="p-2 bg-[#F4F1EA] border border-[#C8C1B4] text-[10px] text-[#D84A1B] font-semibold select-all">
                     npm i three @types/three @react-three/fiber @react-three/drei gsap lucide-react
                   </div>
                 </div>
@@ -2577,20 +2592,20 @@ export default function Home() {
       {/* =====================================================================
           4. COMPACT TECHNICAL STATUS BAR (FOOTER)
          ===================================================================== */}
-      <footer className="h-7 bg-[#10141B] border-t border-[#2B3440] px-4 flex items-center justify-between text-[10px] font-mono text-[#687484] z-30 shrink-0">
+      <footer className="h-7 bg-[#EAE5DC] border-t border-[#C8C1B4] px-4 flex items-center justify-between text-[10px] font-mono text-[#52504C] z-30 shrink-0">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-[#56D6A0]">
-            <span className="w-1.5 h-1.5 bg-[#56D6A0] inline-block" />
+          <span className="flex items-center gap-1.5 text-[#1E6F50] font-semibold">
+            <span className="w-1.5 h-1.5 bg-[#1E6F50] inline-block" />
             WEBGL2 // ACTIVE ({liveTelemetry.fps} FPS)
           </span>
           <span className="hidden sm:inline">
-            PHASE θ₁: <strong className="text-[#F3F5F7]">{liveTelemetry.theta1Deg.toFixed(1)}°</strong>
+            PHASE θ₁: <strong className="text-[#181816]">{liveTelemetry.theta1Deg.toFixed(1)}°</strong>
           </span>
           <span className="hidden sm:inline">
-            PHASE θ₂: <strong className="text-[#F3F5F7]">{liveTelemetry.theta2Deg.toFixed(1)}°</strong>
+            PHASE θ₂: <strong className="text-[#181816]">{liveTelemetry.theta2Deg.toFixed(1)}°</strong>
           </span>
           <span className="hidden md:inline">
-            CENTER DIST C: <strong className="text-[#FF9F43]">{kinematics.centerDistance.toFixed(2)} mm</strong>
+            CENTER DIST C: <strong className="text-[#D84A1B]">{kinematics.centerDistance.toFixed(2)} mm</strong>
           </span>
         </div>
 
@@ -2598,7 +2613,7 @@ export default function Home() {
           <span className="hidden lg:inline">
             SHORTCUTS: [SPACE] PLAY/PAUSE · [R] RESET · [W] WIREFRAME · [E] EXPLODE
           </span>
-          <span className="text-[#A0AAB7]">ISO 54 / DIN 867 INVOLUTE STANDARD</span>
+          <span className="text-[#181816] font-semibold">ISO 54 / DIN 867 INVOLUTE STANDARD</span>
         </div>
       </footer>
     </div>
